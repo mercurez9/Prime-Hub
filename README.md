@@ -10,10 +10,10 @@ A reusable Roblox client-side UI library with a compact dark interface, blue acc
 
 ## Quick start
 
-In Roblox Studio, add `PrimeLib.lua` as a ModuleScript (for example, under ReplicatedStorage), then require it from a LocalScript:
+Use the raw GitHub URL in a client environment that supports `loadstring` and `game:HttpGet`:
 
 ```lua
-local Nova = require(game.ReplicatedStorage:WaitForChild("PrimeLib"))
+local Nova = loadstring(game:HttpGet("https://raw.githubusercontent.com/mercurez9/Prime-Hub/refs/heads/main/PrimeLib.lua"))()
 local Window = Nova:CreateWindow({ Title = "My Hub" })
 local Tab = Window:CreateTab({ Name = "Main" })
 local Section = Tab:CreateSection({ Name = "General", Side = "Left" })
