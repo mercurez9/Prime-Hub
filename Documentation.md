@@ -10,10 +10,10 @@ Place `PrimeLib.lua` somewhere accessible to your project. In a Roblox Studio pr
 local Nova = require(path.to.PrimeLib)
 ```
 
-If you publish the source as a raw file and run it in an environment that supports `loadstring` and `game:HttpGet`, you can load it like this:
+For this repository, use the raw GitHub URL in a client environment that supports `loadstring` and `game:HttpGet`:
 
 ```lua
-local Nova = loadstring(game:HttpGet("RAW_URL_TO_PRIMELIB"))()
+local Nova = loadstring(game:HttpGet("https://raw.githubusercontent.com/mercurez9/Prime-Hub/refs/heads/main/PrimeLib.lua"))()
 ```
 
 The library creates its ScreenGui under the local player's PlayerGui. Use it from a LocalScript or another client-side context.
