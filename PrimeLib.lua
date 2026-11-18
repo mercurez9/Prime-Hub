@@ -17,14 +17,14 @@ local HttpService = game:GetService("HttpService")
 local LocalPlayer = Players.LocalPlayer
 
 local DEFAULT_THEME = {
-    Background = Color3.fromRGB(18, 20, 25),
-    Panel = Color3.fromRGB(24, 27, 34),
-    Element = Color3.fromRGB(30, 34, 43),
-    ElementHover = Color3.fromRGB(38, 44, 55),
-    Accent = Color3.fromRGB(85, 155, 255),
-    Text = Color3.fromRGB(238, 242, 250),
-    Muted = Color3.fromRGB(145, 155, 172),
-    Border = Color3.fromRGB(65, 112, 175),
+    Background = Color3.fromRGB(13, 15, 20),
+    Panel = Color3.fromRGB(19, 22, 29),
+    Element = Color3.fromRGB(26, 30, 39),
+    ElementHover = Color3.fromRGB(34, 40, 52),
+    Accent = Color3.fromRGB(83, 145, 255),
+    Text = Color3.fromRGB(240, 243, 250),
+    Muted = Color3.fromRGB(139, 149, 168),
+    Border = Color3.fromRGB(54, 64, 82),
     Success = Color3.fromRGB(100, 210, 145),
 }
 
@@ -139,7 +139,7 @@ function Nova:CreateWindow(config)
         Parent = playerGui,
     })
 
-    local size = config.Size or UDim2.fromOffset(680, 460)
+    local size = config.Size or UDim2.fromOffset(760, 490)
     local main = create("Frame", {
         Name = "Main",
         Size = size,
@@ -149,12 +149,12 @@ function Nova:CreateWindow(config)
         ClipsDescendants = true,
         Parent = gui,
     })
-    corner(main, 11)
-    stroke(main, theme.Border, 0.18, 1.2)
+    corner(main, 13)
+    stroke(main, theme.Border, 0.28, 1)
 
     local topbar = create("Frame", {
         Name = "Topbar",
-        Size = UDim2.new(1, 0, 0, 43),
+        Size = UDim2.new(1, 0, 0, 48),
         BackgroundColor3 = theme.Panel,
         BorderSizePixel = 0,
         Parent = main,
@@ -169,10 +169,10 @@ function Nova:CreateWindow(config)
     })
     local title = makeLabel(create("Frame", {
         BackgroundTransparency = 1,
-        Position = UDim2.fromOffset(15, 0),
-        Size = UDim2.new(1, -115, 1, 0),
+        Position = UDim2.fromOffset(18, 0),
+        Size = UDim2.new(1, -130, 1, 0),
         Parent = topbar,
-    }), config.Title or "Nova UI", 14, theme.Text, Enum.Font.GothamSemibold)
+    }), config.Title or "Nova UI", 14, theme.Text, Enum.Font.GothamBold)
 
     local minimize = create("TextButton", {
         Text = "—",
@@ -182,7 +182,7 @@ function Nova:CreateWindow(config)
         BackgroundColor3 = theme.Element,
         AutoButtonColor = false,
         Size = UDim2.fromOffset(30, 27),
-        Position = UDim2.new(1, -75, 0.5, -13),
+        Position = UDim2.new(1, -78, 0.5, -13),
         Parent = topbar,
     })
     corner(minimize, 6)
@@ -194,26 +194,26 @@ function Nova:CreateWindow(config)
         BackgroundColor3 = theme.Element,
         AutoButtonColor = false,
         Size = UDim2.fromOffset(30, 27),
-        Position = UDim2.new(1, -39, 0.5, -13),
+        Position = UDim2.new(1, -42, 0.5, -13),
         Parent = topbar,
     })
     corner(close, 6)
 
     local sidebar = create("Frame", {
         Name = "Sidebar",
-        Position = UDim2.fromOffset(0, 44),
-        Size = UDim2.new(0, 145, 1, -44),
+        Position = UDim2.fromOffset(0, 49),
+        Size = UDim2.new(0, 164, 1, -49),
         BackgroundColor3 = theme.Panel,
         BorderSizePixel = 0,
         Parent = main,
     })
-    padding(sidebar, 9, 9, 12, 9)
+    padding(sidebar, 11, 11, 14, 12)
     local tabList = listLayout(sidebar, 6)
 
     local content = create("Frame", {
         Name = "Content",
-        Position = UDim2.new(0, 145, 0, 44),
-        Size = UDim2.new(1, -145, 1, -44),
+        Position = UDim2.new(0, 164, 0, 49),
+        Size = UDim2.new(1, -164, 1, -49),
         BackgroundTransparency = 1,
         Parent = main,
     })
@@ -271,9 +271,9 @@ function Nova:CreateWindow(config)
         local tabName = tabConfig.Name or "Tab"
         local button = create("TextButton", {
             Name = tabName .. "Tab",
-            Size = UDim2.new(1, 0, 0, 34),
+            Size = UDim2.new(1, 0, 0, 38),
             BackgroundColor3 = theme.Panel,
-            Text = (tabConfig.Icon and (tostring(tabConfig.Icon) .. "   ") or "") .. tabName,
+            Text = tabName,
             TextColor3 = theme.Muted,
             TextSize = 12,
             Font = Enum.Font.GothamMedium,
@@ -281,8 +281,35 @@ function Nova:CreateWindow(config)
             AutoButtonColor = false,
             Parent = sidebar,
         })
-        corner(button, 7)
-        padding(button, 10, 6, 0, 0)
+        corner(button, 8)
+        padding(button, 38, 8, 0, 0)
+        if type(tabConfig.Icon) == "string" then
+            local iconAsset = tabConfig.Icon
+            if config.Icons and config.Icons[iconAsset] then iconAsset = config.Icons[iconAsset] end
+            if string.match(iconAsset, "^rbxassetid://%d+$") then
+                create("ImageLabel", {
+                    Name = "TabIcon",
+                    BackgroundTransparency = 1,
+                    Image = iconAsset,
+                    ImageColor3 = theme.Muted,
+                    Size = UDim2.fromOffset(16, 16),
+                    Position = UDim2.fromOffset(11, 11),
+                    Parent = button,
+                })
+            else
+                local iconText = create("TextLabel", {
+                    Name = "TabIcon",
+                    BackgroundTransparency = 1,
+                    Text = string.sub(iconAsset, 1, 1),
+                    TextColor3 = theme.Muted,
+                    TextSize = 13,
+                    Font = Enum.Font.GothamBold,
+                    Size = UDim2.fromOffset(16, 16),
+                    Position = UDim2.fromOffset(11, 10),
+                    Parent = button,
+                })
+            end
+        end
 
         local page = create("ScrollingFrame", {
             Name = tabName .. "Page",
@@ -337,10 +364,10 @@ function Nova:CreateWindow(config)
                 BorderSizePixel = 0,
                 Parent = columns[side],
             })
-            corner(panel, 8)
-            stroke(panel, theme.Border, 0.48, 1)
+            corner(panel, 10)
+            stroke(panel, theme.Border, 0.62, 1)
             local header = create("Frame", {
-                Size = UDim2.new(1, 0, 0, 34),
+                Size = UDim2.new(1, 0, 0, 36),
                 BackgroundTransparency = 1,
                 Parent = panel,
             })
@@ -348,13 +375,13 @@ function Nova:CreateWindow(config)
             makeLabel(header, sectionName, 12, theme.Text, Enum.Font.GothamSemibold)
             local body = create("Frame", {
                 Name = "Elements",
-                Position = UDim2.fromOffset(0, 34),
+                Position = UDim2.fromOffset(0, 36),
                 Size = UDim2.new(1, 0, 0, 0),
                 AutomaticSize = Enum.AutomaticSize.Y,
                 BackgroundTransparency = 1,
                 Parent = panel,
             })
-            padding(body, 8, 8, 0, 9)
+            padding(body, 9, 9, 0, 10)
             local bodyLayout = listLayout(body, 6)
             local section = { Frame = panel, Container = body, Theme = theme }
 
@@ -394,7 +421,7 @@ function Nova:CreateWindow(config)
             function section:AddButton(options)
                 options = type(options) == "table" and options or { Name = tostring(options) }
                 local row = elementRow("Button", options.Height or 34)
-                corner(row, 6)
+                corner(row, 8)
                 local buttonElement = create("TextButton", {
                     Size = UDim2.new(1, 0, 1, 0),
                     BackgroundTransparency = 1,
@@ -602,7 +629,6 @@ function Nova:CreateWindow(config)
                 current.MouseButton1Click:Connect(function()
                     expanded = not expanded
                     optionHolder.Visible = expanded
-                    optionHolder.Size = expanded and UDim2.new(1, 0, 0, 0) or UDim2.new(1, 0, 0, 0)
                 end)
                 if selected ~= nil then flagValue(options.Flag, selected) end
                 return {
@@ -705,7 +731,7 @@ function Nova:CreateWindow(config)
             function section:AddParagraph(options)
                 options = options or {}
                 local row = create("Frame", {
-                    Size = UDim2.new(1, 0, 0, 58),
+                    Size = UDim2.new(1, 0, 0, 64),
                     BackgroundColor3 = theme.Element,
                     BorderSizePixel = 0,
                     Parent = body,
@@ -809,10 +835,18 @@ function Nova:CreateWindow(config)
         sidebar.Visible = not window._minimized
         content.Visible = not window._minimized
         tween(main, 0.18, {
-            Size = window._minimized and UDim2.new(size.X.Scale, size.X.Offset, 0, 43) or window._normalSize,
+            Size = window._minimized and UDim2.new(size.X.Scale, size.X.Offset, 0, 48) or window._normalSize,
         })
     end)
     close.MouseButton1Click:Connect(function() window:Destroy() end)
+
+    local toggleKey = config.ToggleKey or Enum.KeyCode.RightControl
+    UserInputService.InputBegan:Connect(function(input, processed)
+        if processed then return end
+        if input.KeyCode == toggleKey and gui.Parent then
+            main.Visible = not main.Visible
+        end
+    end)
 
     return window
 end
