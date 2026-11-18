@@ -1,8 +1,8 @@
 -- PrimeLib / Nova example
--- Run from a LocalScript in a Roblox Studio project.
--- If using a ModuleScript, update the require path below.
+-- Load Nova directly from the raw GitHub source.
+-- Requires a client environment that supports loadstring and game:HttpGet.
 
-local Nova = require(game.ReplicatedStorage:WaitForChild("PrimeLib"))
+local Nova = loadstring(game:HttpGet("https://raw.githubusercontent.com/mercurez9/Prime-Hub/refs/heads/main/PrimeLib.lua"))()
 
 local Window = Nova:CreateWindow({
     Title = "Prime Hub",
