@@ -68,7 +68,8 @@ local function listLayout(parent, gap, direction)
         FillDirection = direction or Enum.FillDirection.Vertical,
         SortOrder = Enum.SortOrder.LayoutOrder,
         Padding = UDim.new(0, gap or 6),
-    }, nil)
+        Parent = parent,
+    })
 end
 
 local function tween(object, duration, properties)
