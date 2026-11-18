@@ -76,7 +76,6 @@ VisualSection:AddToggle({
         print("Show markers:", value)
     end,
 })
-VisualSection:AddColorPlaceholder -- intentionally not part of this library; see supported elements in Documentation.md
 
 local SettingsSection = Settings:CreateSection({ Name = "Interface", Side = "Left" })
 SettingsSection:AddTextbox({
