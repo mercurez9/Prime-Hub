@@ -1,104 +1,204 @@
--- PrimeLib / Nova example
--- Load Nova directly from the raw GitHub source.
--- Requires a client environment that supports loadstring and game:HttpGet.
+--[[
+    PRIME HUB | NOVA UI
+    Example showcase for the Nova UI library.
+    Run from a client context that supports loadstring and game:HttpGet.
+]]
 
-local Nova = loadstring(game:HttpGet("https://raw.githubusercontent.com/mercurez9/Prime-Hub/refs/heads/main/PrimeLib.lua"))()
+local Nova = loadstring(game:HttpGet(
+    "https://raw.githubusercontent.com/mercurez9/Prime-Hub/refs/heads/main/PrimeLib.lua"
+))()
 
 local Window = Nova:CreateWindow({
-    Title = "Prime Hub",
-    Size = UDim2.fromOffset(680, 460),
+    Title = "PRIME  /  COMMUNITY",
+    Size = UDim2.fromOffset(760, 490),
+    ToggleKey = Enum.KeyCode.RightControl,
     Theme = {
-        Accent = Color3.fromRGB(78, 145, 255),
-        Background = Color3.fromRGB(18, 20, 25),
-        Panel = Color3.fromRGB(24, 27, 34),
+        Background = Color3.fromRGB(12, 14, 19),
+        Panel = Color3.fromRGB(18, 21, 28),
+        Element = Color3.fromRGB(25, 29, 38),
+        ElementHover = Color3.fromRGB(33, 39, 51),
+        Accent = Color3.fromRGB(80, 145, 255),
+        Text = Color3.fromRGB(240, 243, 250),
+        Muted = Color3.fromRGB(137, 148, 168),
+        Border = Color3.fromRGB(54, 65, 84),
     },
 })
 
-local Main = Window:CreateTab({ Name = "Main", Icon = "⌂" })
-local Visuals = Window:CreateTab({ Name = "Visuals", Icon = "◉" })
-local Settings = Window:CreateTab({ Name = "Settings", Icon = "⚙" })
+-- OVERVIEW
+local Home = Window:CreateTab({ Name = "Overview" })
+local Session = Home:CreateSection({ Name = "SESSION", Side = "Left" })
+local Quick = Home:CreateSection({ Name = "QUICK ACTIONS", Side = "Right" })
 
-local General = Main:CreateSection({ Name = "General", Side = "Left" })
-local Values = Main:CreateSection({ Name = "Values", Side = "Right" })
-
-General:AddParagraph({
-    Title = "Welcome",
-    Content = "This is a sample layout built with the Nova UI library.",
+Session:AddParagraph({
+    Title = "Welcome to Prime",
+    Content = "A clean control panel for your Roblox experience. Choose a tab to explore the available interface components.",
 })
 
-General:AddButton({
-    Name = "Send notification",
+Session:AddLabel({ Name = "SESSION INFORMATION", TextSize = 10, Color = Color3.fromRGB(105, 160, 255) })
+Session:AddLabel({ Name = "Status     •     Interface loaded" })
+Session:AddLabel({ Name = "Library    •     Nova UI" })
+Session:AddLabel({ Name = "Toggle     •     RightControl" })
+
+Quick:AddButton({
+    Name = "Test notification",
     Callback = function()
         Window:Notify({
             Title = "Prime Hub",
-            Content = "Your button works.",
+            Content = "Notifications are working correctly.",
             Duration = 3,
         })
     end,
 })
-
-General:AddToggle({
-    Name = "Example toggle",
-    Flag = "ExampleToggle",
-    Default = false,
-    Callback = function(value)
-        print("Toggle:", value)
+Quick:AddButton({
+    Name = "Print test message",
+    Callback = function()
+        print("[Prime Hub] Button pressed")
     end,
 })
-
-Values:AddSlider({
-    Name = "Example amount",
-    Flag = "ExampleAmount",
-    Min = 0,
-    Max = 100,
-    Default = 35,
-    Round = 0,
-    Callback = function(value)
-        print("Slider:", value)
-    end,
-})
-
-Values:AddDropdown({
-    Name = "Example mode",
-    Flag = "ExampleMode",
-    Options = { "Smooth", "Instant", "Manual" },
-    Default = "Smooth",
-    Callback = function(value)
-        print("Dropdown:", value)
-    end,
-})
-
-local VisualSection = Visuals:CreateSection({ Name = "Visual options", Side = "Left" })
-VisualSection:AddToggle({
-    Name = "Show markers",
+Quick:AddDivider()
+Quick:AddToggle({
+    Name = "Demo toggle",
+    Flag = "DemoToggle",
     Default = true,
     Callback = function(value)
-        print("Show markers:", value)
+        print("Demo toggle:", value)
     end,
 })
 
-local SettingsSection = Settings:CreateSection({ Name = "Interface", Side = "Left" })
-SettingsSection:AddTextbox({
-    Name = "Display name",
-    Placeholder = "Type something...",
-    Callback = function(text)
-        print("Textbox:", text)
+-- PLAYER
+local Player = Window:CreateTab({ Name = "Player" })
+local Movement = Player:CreateSection({ Name = "MOVEMENT", Side = "Left" })
+local Character = Player:CreateSection({ Name = "CHARACTER", Side = "Right" })
+
+Movement:AddSlider({
+    Name = "Walk speed",
+    Flag = "WalkSpeedDemo",
+    Min = 0,
+    Max = 100,
+    Default = 16,
+    Round = 0,
+    Callback = function(value)
+        print("Walk speed demo:", value)
     end,
 })
-SettingsSection:AddKeybind({
-    Name = "Example keybind",
-    Default = Enum.KeyCode.RightShift,
+Movement:AddSlider({
+    Name = "Jump power",
+    Flag = "JumpPowerDemo",
+    Min = 0,
+    Max = 150,
+    Default = 50,
+    Round = 0,
+    Callback = function(value)
+        print("Jump power demo:", value)
+    end,
+})
+Movement:AddDropdown({
+    Name = "Movement mode",
+    Flag = "MovementMode",
+    Options = { "Default", "Smooth", "Custom" },
+    Default = "Default",
+    Callback = function(value)
+        print("Movement mode:", value)
+    end,
+})
+
+Character:AddToggle({
+    Name = "Demo character option",
+    Default = false,
+    Callback = function(value)
+        print("Character option:", value)
+    end,
+})
+Character:AddButton({
+    Name = "Reset demo values",
+    Callback = function()
+        Nova:SetFlag("WalkSpeedDemo", 16)
+        Nova:SetFlag("JumpPowerDemo", 50)
+        print("Demo values reset in flag storage")
+    end,
+})
+
+-- VISUALS
+local Visuals = Window:CreateTab({ Name = "Visuals" })
+local PlayerVisuals = Visuals:CreateSection({ Name = "PLAYER VISUALS", Side = "Left" })
+local WorldVisuals = Visuals:CreateSection({ Name = "WORLD", Side = "Right" })
+
+PlayerVisuals:AddToggle({
+    Name = "Player highlight",
+    Default = false,
+    Callback = function(value)
+        print("Player highlight demo:", value)
+    end,
+})
+PlayerVisuals:AddToggle({
+    Name = "Display names",
+    Default = true,
+    Callback = function(value)
+        print("Display names demo:", value)
+    end,
+})
+PlayerVisuals:AddToggle({
+    Name = "Show distance",
+    Default = false,
+    Callback = function(value)
+        print("Show distance demo:", value)
+    end,
+})
+WorldVisuals:AddDropdown({
+    Name = "Highlight color",
+    Options = { "Blue", "White", "Purple", "Red" },
+    Default = "Blue",
+    Callback = function(value)
+        print("Highlight color demo:", value)
+    end,
+})
+WorldVisuals:AddSlider({
+    Name = "Visual range",
+    Min = 50,
+    Max = 1000,
+    Default = 250,
+    Round = 0,
+    Callback = function(value)
+        print("Visual range demo:", value)
+    end,
+})
+
+-- SETTINGS
+local Settings = Window:CreateTab({ Name = "Settings" })
+local Interface = Settings:CreateSection({ Name = "INTERFACE", Side = "Left" })
+local Information = Settings:CreateSection({ Name = "INFORMATION", Side = "Right" })
+
+Interface:AddKeybind({
+    Name = "UI toggle key",
+    Default = Enum.KeyCode.RightControl,
     Callback = function(key)
-        print("Pressed:", key.Name)
+        print("Key pressed:", key.Name)
     end,
 })
-SettingsSection:AddDivider()
-SettingsSection:AddLabel({ Name = "Nova UI • Prime Hub" })
+Interface:AddToggle({
+    Name = "Demo setting",
+    Default = false,
+    Callback = function(value)
+        print("Demo setting:", value)
+    end,
+})
+Interface:AddTextbox({
+    Name = "Custom label",
+    Placeholder = "Enter a label...",
+    Callback = function(value)
+        print("Custom label:", value)
+    end,
+})
 
-task.delay(1, function()
-    Window:Notify({
-        Title = "Nova loaded",
-        Content = "The example interface is ready.",
-        Duration = 3,
-    })
-end)
+Information:AddParagraph({
+    Title = "Nova UI",
+    Content = "A lightweight Roblox interface library. This example demonstrates the available controls; demo callbacks only print values and do not change gameplay.",
+})
+Information:AddLabel({ Name = "Prime Hub  •  Nova UI" })
+Information:AddLabel({ Name = "RightControl  •  Hide / show" })
+
+Window:Notify({
+    Title = "Prime Hub",
+    Content = "Interface loaded successfully.",
+    Duration = 3,
+})
